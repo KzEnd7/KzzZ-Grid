@@ -1,0 +1,328 @@
+/* 离屏画布：尺寸必须有效，但放在屏幕外不可见 */
+.exp-offstage {
+  position: absolute;
+  left: -100000px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+}
+.exp-offstage-inner {
+  position: relative;
+}
+
+.exp-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 4, 8, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.exp-panel {
+  width: min(1080px, calc(100vw - 48px));
+  height: min(680px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: #101016;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.exp-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex: none;
+}
+
+.exp-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.exp-title span {
+  color: #9a9ab0;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.exp-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.exp-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #9a9ab0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.exp-tabs button:hover { color: #e8e8f0; }
+.exp-tabs button.on {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: 600;
+}
+.exp-tabs .ic {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.exp-tabs em {
+  font-style: normal;
+  opacity: 0.65;
+  font-size: 11px;
+}
+
+.exp-close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #8a8a9c;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+.exp-close:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+.exp-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 18px;
+  padding: 18px;
+}
+
+.exp-preview {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.exp-preview-inner {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0a0a10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exp-preview-inner canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.exp-preview-cap {
+  font-size: 11px;
+  color: #6e6e82;
+  text-align: center;
+}
+.exp-progress {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+.exp-progress-bar {
+  height: 100%;
+  background: rgba(139, 92, 246, 0.55);
+  transition: width 0.1s linear;
+}
+.exp-progress span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #fff;
+}
+
+.exp-settings {
+  width: 300px;
+  flex: none;
+  overflow-y: auto;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.4) transparent;
+}
+.exp-settings::-webkit-scrollbar { width: 6px; }
+.exp-settings::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 999px; }
+
+.exp-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 9px 10px;
+  margin-bottom: 8px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.035);
+}
+.exp-k {
+  font-size: 11px;
+  color: #9a9ab0;
+}
+.exp-v {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e8e8f0;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+.exp-v:focus { border-color: rgba(139, 92, 246, 0.6); }
+.exp-v option { background: #17171f; }
+
+.exp-seg {
+  display: flex;
+  gap: 4px;
+}
+.exp-seg button {
+  flex: 1;
+  padding: 8px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #9a9ab0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.exp-seg button:hover { color: #fff; }
+.exp-seg button.on {
+  background: #fff;
+  color: #14141c;
+  border-color: #fff;
+  font-weight: 600;
+}
+
+.exp-switch {
+  width: 38px;
+  height: 21px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.exp-switch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.exp-switch.on { background: #8b5cf6; }
+.exp-switch.on span { transform: translateX(17px); }
+
+.exp-hint {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #8b7fc0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.08);
+  margin-bottom: 8px;
+}
+.exp-code {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0a0a10;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b9b9cc;
+  font-size: 10px;
+  line-height: 1.5;
+  overflow: auto;
+  white-space: pre;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  max-height: 380px;
+}
+
+.exp-foot {
+  flex: none;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.exp-summary {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: #7a7a8e;
+  line-height: 1.6;
+}
+.exp-note { color: #c4b5fd; }
+.exp-actions { display: flex; gap: 8px; flex: none; }
+.exp-primary, .exp-secondary {
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.exp-primary {
+  background: #fff;
+  color: #14141c;
+}
+.exp-primary:hover { background: #e8e8f0; }
+.exp-primary:disabled { opacity: 0.6; cursor: default; }
+.exp-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8e8f0;
+}
+.exp-secondary:hover { background: rgba(255, 255, 255, 0.14); }
+
+@media (max-width: 720px) {
+  .exp-panel { width: calc(100vw - 20px); height: calc(100vh - 20px); }
+  .exp-body { flex-direction: column; }
+  .exp-settings { width: 100%; }
+  .exp-tabs em { display: none; }
+}
